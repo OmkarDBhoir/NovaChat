@@ -1,0 +1,91 @@
+# ==========================================
+# 1. Operating System & IDE Files
+# ==========================================
+# OS specific
+.DS_Store
+Thumbs.db
+*.lnk
+
+# JetBrains / IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Eclipse
+.metadata/
+.classpath
+.project
+.settings/
+*.launch
+bin/
+
+# Visual Studio Code
+.vscode/
+!.vscode/extensions.json
+.history/
+
+# ==========================================
+# 2. Spring Boot / Java Backend
+# ==========================================
+# Compiled output
+target/
+build/
+.gradle/
+**/build/
+**/target/
+
+# Package files
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+
+# Crash logs and heap dumps
+hl_err_pid*
+*.hprof
+
+# ==========================================
+# 3. React / Node.js Frontend
+# ==========================================
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Production build artifacts
+dist/
+build/
+output/
+
+# Debug and log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Next.js / Remix / Gatsby specific (if applicable)
+.next/
+.cache/
+
+# ==========================================
+# 4. Security & Environment Variables
+# ==========================================
+# Local environment files (NEVER commit secrets)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env.json
+
+# Local configurations / Keystores
+*.jks
+*.p12
+*.key
+*.pem

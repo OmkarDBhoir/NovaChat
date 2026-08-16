@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: novachat
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/novachat?currentSchema=novachat
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  hikari:
+    maximum-pool-size: 10
+    minimum-idle: 5
+    idle-timeout: 30000
+    connection-timeout: 30000
+    max-lifetime: 1800000
+    pool-name: HikariCP
+  
+  jpa:
+    show-sql: true
+    hibername:
+      ddl-auto: update
+    properties:
+      hibernate:
+    dialect: org.hibernate.dialect.PostgreSQLDialect
+    format-sql: true
