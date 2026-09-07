@@ -2,6 +2,7 @@ package com.novachat.novachat.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,12 +39,13 @@ public class UserController {
 
 	@GetMapping("/me")
 	public UserResponse getCurrentUser(Principal principal) {
-
+		
 		return userService.getCurrentUser(principal.getName());
 	}
 
 	@GetMapping("/search")
 	public List<UserSearchResponse> searchUsers(@RequestParam String query, Principal principal) {
-		return userService.searchUsers(query, principal.getName());
+		UUID currentUserID = userService.getUserIdByUsername(principal.getName());
+		return userService.searchUsers(query, currentUserID);
 	}
 }

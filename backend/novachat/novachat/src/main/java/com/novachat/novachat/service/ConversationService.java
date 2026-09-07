@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.novachat.novachat.constant.ConversationMemberRole;
 import com.novachat.novachat.constant.ConversationType;
+import com.novachat.novachat.constant.MessageType;
+import com.novachat.novachat.dto.ConversationListProjection;
 import com.novachat.novachat.dto.ConversationListResponse;
 import com.novachat.novachat.dto.ConversationResponse;
 import com.novachat.novachat.dto.CreateConversationRequest;
@@ -74,20 +76,25 @@ public class ConversationService {
 	@Transactional
 	public List<ConversationListResponse> getConversations(UUID currentUserId) {
 
-		List<ConversationMember> memberships = conversationMemberRepository.findByUserId(currentUserId);
+		return conversationRepository.findConversationList(currentUserId).stream().map(this::toConversationResponse)
+				.toList();
+	}
 
-		return memberships.stream().map(membership -> {
-			Conversation conversation = membership.getConversation();
-			ConversationMember otherMember = conversationMemberRepository.findByConversationId(conversation.getId())
-					.stream().filter(member -> member.getId().equals(currentUserId)).findFirst().orElse(null);
-			MessageResponse lastMessage = messageRepository
-					.findTopByConversationIdOrderByCreatedAtDesc(conversation.getId()).map(MessageResponse::from)
-					.orElse(null);
+	private ConversationListResponse toConversationResponse(ConversationListProjection projection) {
 
-			return new ConversationListResponse(conversation.getId(), conversation.getType(),
-					otherMember != null ? otherMember.getUser().getId() : null,
-					otherMember != null ? otherMember.getUser().getUsername() : null, lastMessage,
-					conversation.getUpdatedAt());
-		}).sorted((a, b) -> b.updatedAt().compareTo(a.updatedAt())).toList();
+		MessageResponse lastMessage = null;
+
+		if (projection.getLastMessageId() != null) {
+
+			lastMessage = new MessageResponse(projection.getLastMessageId(), projection.getConversationId(),
+					projection.getLastMessageSenderId(), projection.getLastMessageSenderUsername(),
+					MessageType.valueOf(projection.getLastMessageType()),
+					projection.getLastMessageContent(), projection.getLastMessageCreatedAt(),
+					projection.getLastMessageUpdatedAt());
+		}
+
+		return new ConversationListResponse(projection.getConversationId(),
+				ConversationType.valueOf(projection.getConversationType()), projection.getOtherUserId(),
+				projection.getOtherUsername(), lastMessage, projection.getConversationUpdatedAt());
 	}
 }

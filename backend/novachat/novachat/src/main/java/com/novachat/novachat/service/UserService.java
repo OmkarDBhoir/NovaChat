@@ -71,4 +71,14 @@ public class UserService {
 				.toList();
 	}
 
+	public List<UserSearchResponse> searchUsers(String query, UUID currentUserId) {
+
+		if (query == null || query.isBlank()) {
+			return List.of();
+		}
+
+		return userRepository.findTop20ByUsernameContainingIgnoreCase(query.trim()).stream()
+				.filter(user -> !user.getId().equals(currentUserId)).map(UserSearchResponse::from).toList();
+	}
+
 }
